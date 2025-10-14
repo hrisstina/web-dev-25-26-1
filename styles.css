@@ -1,0 +1,28 @@
+#joke{
+    border-style: inset;
+    border-width: 10px;
+    border: 10px palevioletred;
+  }
+
+  h1{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+     
+
+  }
+
+  body{
+    background-color: lightpink;
+
+  }
+
+  p{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+  }
+
+  footer{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+  }
