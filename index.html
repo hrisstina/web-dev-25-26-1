@@ -1,60 +1,82 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Frontend – Backend Demo – by Hriss Tsvetanova</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Frontend – Backend Demo – by Hriss Tsvetanova</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 40px; }
-    #joke { margin-top: 20px; padding: 10px; border: 4px inset rgb(212, 111, 144); width: 60%; }
-    button { padding: 8px 12px; }
+    body { font-family: system-ui, sans-serif; margin: 40px;background-color: bisque; }
+    #joke, #jokesList {
+      margin-top: 20px; padding: 10px; border: 4px inset rgb(212,111,144); width: 60%;
+      min-height: 20px;
+    }
+    button { padding: 8px 12px; margin-right: 10px; cursor: pointer; }
+    ul { list-style: square; padding-left: 20px; }
+    .pic { display: block; margin: 24px auto; width: 20%; }
+    footer { text-align: center; margin-top: 40px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Frontend & Backend Communication</h1>
-  </header>
+  <header><h1 style="font-family: 'Courier New', Courier, monospace;font-weight: bold;">Frontend & Backend Communication</h1></header>
 
   <main>
     <section>
-      <p>This page calls a public backend API for a random joke.</p>
-      <button id="btn">Get Joke</button>
+      <p style="font-family: 'Courier New', Courier, monospace;font-weight: bold;">This page calls a public backend API for random Chuck Norris jokes.</p>
+
+      <!-- Бутон 1: една шега -->
+      <button id="btn1" style="font-family: 'Courier New', Courier, monospace;font-weight: bold;">Get Joke</button>
       <article id="joke"></article>
-      <br>
-      <p class="subtext"> We are using button (clickable element) after we click the btn we recive a text which is actual chucknorris joke "cats don't mess with Chuck Norris, coz they know dat 1 kick from him equals to 5 cat lifes and we all know Chuck Norris doesn't kick once" </p>
-      <br>
-      <a href="https://api.chucknorris.io" style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Dirty jokes about chucknorris</a>
-      <br>
-      <br>
-      <br>
-      <img class = pic src="img/645-200x200.jpeg">
-      <style>
-        .pic{
-          display: block;
-          margin: auto;
-          width: 20%;
-        }
-      </style>
-      <br>
-      <br>
-      <footer> All rights recived 14.10.2025</footer>
-      <style>
-        footer{
-          text-align: center;
-        }
-      </style>
+
+      <!-- Бутон 2: две шеги като списък -->
+      <br /><br />
+      <button id="btn2" style="font-family: 'Courier New', Courier, monospace; font-weight: bold;">Get 2 Jokes</button>
+      <article id="jokesList"></article>
+
+      <br /><br />
+      <a href="https://api.chucknorris.io" style="font-family: 'Courier New', monospace; font-weight: bold;">
+        Dirty jokes about Chuck Norris
+      </a>
+
+      <img class="pic" src="img/645-200x200.jpeg" alt="Chuck Norris" />
+      <footer style="font-family: monospace;text:bold;">All rights reserved 14.10.2025</footer>
     </section>
   </main>
 
   <script>
-    const out = document.getElementById('joke');
-    document.getElementById('btn').onclick = async () => {
-      out.textContent = "Loading...";
-      const r = await fetch("https://api.chucknorris.io/jokes/random");
-      const data = await r.json();
-      out.textContent = data.value;
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      const oneOut = document.getElementById('joke');
+      const listOut = document.getElementById('jokesList');
+      const btn1 = document.getElementById('btn1');
+      const btn2 = document.getElementById('btn2');
+
+      async function getJoke() {
+        const r = await fetch('https://api.chucknorris.io/jokes/random');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const data = await r.json();
+        return data.value;
+      }
+
+      btn1.onclick = async () => {
+        oneOut.textContent = 'Loading...';
+        try {
+          oneOut.textContent = await getJoke();
+        } catch (err) {
+          console.error(err);
+          oneOut.textContent = 'Error loading joke. Check your internet or try again.';
+        }
+      };
+
+      btn2.onclick = async () => {
+        listOut.textContent = 'Loading...';
+        try {
+          const [j1, j2] = await Promise.all([getJoke(), getJoke()]);
+          listOut.innerHTML = `<ul><li>${j1}</li><li>${j2}</li></ul>`;
+        } catch (err) {
+          console.error(err);
+          listOut.textContent = 'Error loading jokes. Check your internet or try again.';
+        }
+      };
+    });
   </script>
 </body>
 </html>
